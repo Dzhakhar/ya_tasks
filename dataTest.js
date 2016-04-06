@@ -44,6 +44,17 @@ var dataTest = [
     }
   },
   {
+    from: 'London',
+    to: 'Rome',
+    ticket: '343',
+    transport: 'air',
+    details: {
+      seat: '45B',
+      flight: 'SK455',
+      comment: 'Baggage will be automatically transferred from your last leg'
+    }
+  },
+  {
     from: 'Madrid',
     to: 'Barcelona',
     ticket: '343',

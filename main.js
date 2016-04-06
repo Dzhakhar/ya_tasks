@@ -1,83 +1,88 @@
-var map = [];
-var result;
+Array.prototype.genius = function (split) {
+  this.map = [];
+  this.result;
 
-function dataIntoMap(arr, map, reverse){
-  if(!reverse){
-    for(var i = 0; i < arr.length; i++){
-      map[arr[i].to] = arr[i];
-      map.length++;
+  this.dataIntoMap = function (map, reverse){
+    if(!reverse){
+      for(var i = 0; i < this.length; i++){
+        map[this[i].to] = this[i];
+        map.length++;
+      }
+      return map;
+    } else {
+      for(var i = 0; i < this.length; i++){
+        map[this[i].from] = this[i];
+        map.length++;
+      }
+      return map;
     }
-    return map;
-  } else {
-    for(var i = 0; i < arr.length; i++){
-      map[arr[i].from] = arr[i];
-      map.length++;
+  }
+
+  this.resultConcat = function (p1, p2){
+    if(p2.transport === 'air'){
+      var air = "flight " + p2.details.flight + " from " + p2.from + " airport " + "to" + " " + p2.to;
     }
-    return map;
-  }
-}
+    else {
+      var air = ""
+    }
 
-function resultConcat(p1, p2, split){
-  if(p2.transport === 'air'){
-    var air = "flight " + p2.details.flight + " from " + p2.from + " airport " + "to" + " " + p2.to;
-  }
-  else {
-    var air = "***"
-  }
+    if(p2.transport === 'train'){
+      var train = "train " + p2.details.flight + " from " + p2.from + " to " + p2.to
+    }
+    else {
+      var train = "";
+    }
 
-  if(p2.transport === 'train'){
-    var train = "train " + p2.details.flight + " from " + p2.from + " to " + p2.to
-  }
-  else {
-    var train = "***";
-  }
+    if(p2.details.comment){
+      var comment = p2.details.comment;
+    }
+    else {
+      var comment = "";
+    }
 
-  if(p2.details.comment){
-    var comment = p2.details.comment;
-  }
-  else {
-    var comment = "***";
-  }
-
-  if(split){
-    var res = "Take " + train + air + ". Seat " + p2.details.seat + ". " + comment + ". ///";
-    (result) ? result += res.replace("***", "").split("///") : result = res.replace("***", "").split("///");
-  } else {
     var res = "Take " + train + air + ". Seat " + p2.details.seat + ". " + comment + ". ";
-    (result) ? result += res.replace("***", "") : result = res.replace("***", "");
+    (this.result) ? this.result += res : this.result = res;
   }
-}
 
-function mapSort(m, arr, split){
-  var start;
-  for(var i in m){
-    if(m[m[i].from] === undefined){
-      start = m[i];
-      break;
-    }
-  }
-  var mapReverse = [];
-  var reversedMap = dataIntoMap(arr, mapReverse, true);
-  console.log("from: " + start.from + ", to: " + start.to);
-  console.log("^^ start ^^");
+  this.mapSort = function(m){
+    var start;
 
-  for(var i in reversedMap){
-    if(reversedMap[i].from !== start.from){
-      if(reversedMap[reversedMap[i].to]){
-        try {
-          if(split){
-            resultConcat(start, reversedMap[start.to], true);
-          } else {
-            resultConcat(start, reversedMap[start.to]);
-          }
-          start = reversedMap[start.to];
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        var finish = reversedMap[i];
+    for(var i in m){
+      if(m[m[i].from] === undefined){
+        start = m[i];
+        break;
       }
     }
+
+    this.resultConcat(start, start);
+
+    var mapReverse = [];
+    var reversedMap = this.dataIntoMap(mapReverse, true);
+
+    for(var i in reversedMap){
+      // if(reversedMap[i].from !== start.from){
+        if(reversedMap[reversedMap[i].to]){
+          try {
+            this.resultConcat(start, reversedMap[start.to]);
+            start = reversedMap[start.to];
+          } catch (e) {
+            console.log(e);
+          }
+        }
+      // }
+    }
   }
-  console.log("from: " + finish.from + ", to: " + finish.to);
-}
+
+  this.go = function(){
+    this.dataIntoMap(this.map);
+    this.mapSort(this.map);
+    
+    var result = this.result;
+    this.result = [];
+    this.map = [];
+
+    return result;
+  }
+
+  return this.go();
+};
