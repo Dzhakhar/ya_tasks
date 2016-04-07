@@ -6,6 +6,7 @@
 
 Функция объявлена как прототип class-a Array. 
 Формат вдохных данных:
+```javascript
   var dataTest = [
   {
     from: 'Moscow', //required
@@ -40,15 +41,19 @@
       comment: 'Baggage will be automatically transferred from your last leg'
     }
   }
-
+```
     
     
 Функция вызывается как :
+```javascript
   dataTest.genius();
+```
 
 По умолчанию функция возвращает единую строку
 
 Параметры
 --------------
+```javascript
 dataTest.genius(true);
+```
 Вернёт массив строк. Разделённых по карточкам.
